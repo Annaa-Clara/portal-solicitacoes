@@ -1,5 +1,7 @@
 # Portal de Solicitações Internas
 
+[![CI/CD](https://github.com/Annaa-Clara/portal-solicitacoes/actions/workflows/ci.yml/badge.svg)](https://github.com/Annaa-Clara/portal-solicitacoes/actions/workflows/ci.yml)
+
 Sistema web para colaboradores **registrarem demandas internas** (TI, RH, Compras, Financeiro e Infraestrutura) e **acompanharem cada uma até a conclusão**, com dashboard de indicadores, filtros, controle de acesso por perfil e linha do tempo de cada solicitação.
 
 Desenvolvido como avaliação técnica (mini-projeto full stack) para a vaga de Desenvolvedor(a) de Sistemas Júnior da **bit Soluções**.
