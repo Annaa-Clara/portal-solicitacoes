@@ -1,0 +1,63 @@
+# Sobe o sistema completo com um comando:  docker compose up -d --build
+# Acesse http://localhost:8080  (API/Swagger: http://localhost:3000/api/docs)
+
+name: portal-solicitacoes
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-portal}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portal}
+      POSTGRES_DB: ${POSTGRES_DB:-portal_solicitacoes}
+      TZ: America/Fortaleza
+    volumes:
+      - dados-postgres:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${POSTGRES_USER:-portal}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-portal}
+      DATABASE_NAME: ${POSTGRES_DB:-portal_solicitacoes}
+      DATABASE_MIGRATE_ON_START: "true"
+      SESSION_IDLE_MINUTES: ${SESSION_IDLE_MINUTES:-120}
+      SESSION_MAX_HOURS: ${SESSION_MAX_HOURS:-12}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      CORS_ORIGINS: http://localhost:8080
+      TRUST_PROXY: "true"
+      APP_TIMEZONE: America/Fortaleza
+      SWAGGER_ENABLED: "true"
+    ports:
+      - "${API_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  dados-postgres:
