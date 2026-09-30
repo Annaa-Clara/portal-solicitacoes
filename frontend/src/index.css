@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --fundo: 220 33% 98%;
+    --superficie: 0 0% 100%;
+    --elevada: 220 25% 96%;
+    --borda: 220 16% 90%;
+    --texto: 222 47% 11%;
+    --suave: 215 16% 45%;
+    --marca: 224 76% 48%;
+    --marca-forte: 226 71% 40%;
+    --marca-fundo: 226 100% 96%;
+    --perigo: 0 72% 51%;
+    color-scheme: light;
+  }
+
+  .dark {
+    --fundo: 224 30% 7%;
+    --superficie: 223 25% 10%;
+    --elevada: 222 20% 14%;
+    --borda: 220 16% 19%;
+    --texto: 210 30% 96%;
+    --suave: 217 13% 64%;
+    --marca: 217 91% 60%;
+    --marca-forte: 213 94% 68%;
+    --marca-fundo: 224 50% 17%;
+    --perigo: 0 84% 63%;
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-fundo font-sans text-texto antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-marca/60 ring-offset-2 ring-offset-fundo;
+  }
+
+  ::selection {
+    @apply bg-marca/20;
+  }
+}
+
+@layer components {
+  .cartao {
+    @apply rounded-2xl border border-borda bg-superficie shadow-cartao;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
